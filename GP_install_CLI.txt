@@ -13,6 +13,3 @@ sudo tar -xvf PanGPLinux-5.3.4-c5.tar.gz
 
 # Install the package
 sudo dpkg -i GlobalProtect_deb-5.3.4.0-5.deb
-
-
-
