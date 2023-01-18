@@ -1,6 +1,32 @@
 #!/bin/bash
 
+sudo mkdir -p /opt/paloaltonetworks/globalprotect
+
+cd /opt/paloaltonetworks/globalprotect
+
+sudo  echo "<?xml version="1.0" encoding="UTF-8"?>
+<GlobalProtect>
+        <Settings>
+                <default-browser>yes</default-browser>
+                <disable-globalprotect>0</disable-globalprotect>
+                <regioncode>CA</regioncode>
+        </Settings>
+        <PanSetup>
+                <InstallHistory>Fresh Install</InstallHistory>
+                <CurrentVersion>5.3.4-5</CurrentVersion>
+                <PreviousVersion/>
+        </PanSetup>
+        <PanGPS>
+                <UserProfileType>0</UserProfileType>
+                <disable-globalprotect>0</disable-globalprotect>
+        </PanGPS>
+</GlobalProtect>" | sudo tee pangps.xml
+
+# Save and exit the filexv
+:wq
+
 if ! dpkg-query -W libqt5webkit5; then
+
 # If not, install it
 sudo apt-get install -y libqt5webkit5
 fi
@@ -13,3 +39,17 @@ sudo tar -xvf PanGPLinux-5.3.4-c5.tar.gz
 
 # Install the package
 sudo dpkg -i GlobalProtect_deb-5.3.4.0-5.deb
+
+# Prompt user to reboot 
+
+read -p "Reboot the machine? (yes/no): " response
+if [ "$response" == "yes" ]; then
+
+# Reboot machine
+sudo reboot
+
+# Schedule command to run after reboot
+(crontab -l 2>/dev/null; echo "@reboot globalprotect connect --portal vpn.broadsign.com") | crontab -
+else
+echo "Reboot not confirmed, Exiting."
+fi
