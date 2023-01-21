@@ -42,14 +42,12 @@ sudo dpkg -i GlobalProtect_deb-5.3.4.0-5.deb
 
 # Prompt user to reboot 
 
-read -p "Reboot the machine? (yes/no): " response
+read -p "Restart your computer to complete the Global Protect setup ? (yes/no): " response
 if [ "$response" == "yes" ]; then
 
 # Reboot machine
 sudo reboot
 
-# Schedule command to run after reboot
-(crontab -l 2>/dev/null; echo "@reboot globalprotect connect --portal vpn.broadsign.com") | crontab -
 else
 echo "Reboot not confirmed, Exiting."
 fi
